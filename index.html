@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CRM drills</title>
+<meta name="description" content="Crew resource management training drills: branching scenarios with PAUSE and next best action, and a Swiss-cheese debrief.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header><div class="hin">
+  <h1>CRM drills</h1>
+  <p class="sub">Crew resource management scenarios for the crew room. Pick a drill, make the calls, and hit PAUSE whenever something feels off. Each one ends with a Swiss-cheese debrief and questions for the facilitator.</p>
+  <div class="spacer"></div><div class="spacer"></div>
+</div></header>
+<main class="one">
+  <div class="menu" id="menu"><p class="loading">Loading drills…</p></div>
+  <section class="card author">
+    <h2>Write a new drill</h2>
+    <p class="text">Every drill is one text file in the <code>scenarios</code> folder. Copy an existing one, change the words, and add its name to <code>scenarios/list.json</code>. The README explains each part in plain language.</p>
+    <a class="go" href="drill.html">Try a scenario file</a><a class="go ghost" href="https://github.com/Gnowsk/crm-drills#readme">Read the guide</a>
+  </section>
+</main>
+<script>
+(async () => {
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const menu = document.getElementById('menu');
+  try {
+    const ids = await (await fetch('scenarios/list.json', { cache: 'no-cache' })).json();
+    const cards = await Promise.all(ids.map(async id => {
+      try {
+        const d = await (await fetch(`scenarios/${encodeURIComponent(id)}.json`, { cache: 'no-cache' })).json();
+        return `<article class="card drill">
+          <div class="kicker">${esc(d.kicker || 'Drill')}${d.duration ? ' · ' + esc(d.duration) : ''}</div>
+          <h2>${esc(d.title)}</h2>
+          <p>${esc(d.summary || d.subtitle || '')}</p>
+          <ul class="steps">${(d.steps || []).map((s, i) => `<li>${i + 1}. ${esc(s)}</li>`).join('')}</ul>
+          <div class="foot"></div>
+          <a class="go" href="drill.html?s=${encodeURIComponent(id)}">Start drill</a>
+        </article>`;
+      } catch {
+        return `<article class="card drill err"><h2>${esc(id)}</h2><p>This scenario file couldn’t be read. Open it in “Try a scenario file” to see what’s wrong.</p></article>`;
+      }
+    }));
+    menu.innerHTML = cards.join('');
+  } catch {
+    menu.innerHTML = '<p class="note">The list of drills couldn’t be loaded. If you opened this file straight from your computer, use the live site or a local web server instead (see README).</p>';
+  }
+})();
+</script>
+</body>
+</html>
