@@ -1,0 +1,272 @@
+{
+  "title": "Two metres up",
+  "kicker": "Speak-up drill",
+  "duration": "About 8 minutes",
+  "summary": "The team is racing a deadline and a colleague is heading up a ladder without a harness. You’re his teammate: spot it, speak up, escalate, and make it safe.",
+  "subtitle": "A speak-up drill. The team is racing a deadline and a colleague is heading up a ladder without a harness. You’re his teammate. Make the calls, and hit PAUSE whenever something feels off.",
+
+  "steps": ["Spot it", "Speak up", "Escalate", "Make it safe", "Close out"],
+
+  "skills": {
+    "COM":  { "name": "Communication", "max": 7 },
+    "SA":   { "name": "Situational awareness", "max": 4 },
+    "LEAD": { "name": "Assertiveness", "max": 7 },
+    "DM":   { "name": "Decision making", "max": 6 }
+  },
+
+  "people": {
+    "RV": { "name": "Ravi" },
+    "AA": { "name": "3SG Aaron (team lead)" },
+    "ME": { "name": "You", "me": true },
+    "WG": { "name": "2SG Wong (phone)" },
+    "SO": { "name": "Unit Safety Officer (phone)" }
+  },
+
+  "state": { "pos": "ground", "harness": false, "late": false, "fall": false },
+
+  "clock": { "finish": "1708" },
+
+  "picture": {
+    "file": "pictures/ladder.svg",
+    "alt": "A colleague on a ladder against a 2 metre shelter roof",
+    "shake": "ladder",
+    "show": { "har": "harness", "lan": ["harness", "pos=top"] },
+    "move": {
+      "fig": [
+        { "if": "pos=top", "to": "translate(124 104)" },
+        { "if": "pos=fallen", "to": "translate(70 172) rotate(-82)" },
+        { "to": "translate(76 176)" }
+      ]
+    },
+    "caption": [
+      { "if": "fall", "text": "Work stopped. Medic called." },
+      { "if": ["pos=top", "harness"], "text": "Harnessed and clipped to the mast anchor." },
+      { "if": "pos=top", "text": "At the top of the ladder, no harness." },
+      { "text": "Shelter roof edge, two metres up." }
+    ]
+  },
+
+  "checklist": {
+    "title": "Work at height",
+    "items": [
+      { "text": "Work at height recognised", "tick": "speak=held" },
+      { "text": "Supervisor aware and task held", "tick": "esc=held" },
+      { "text": "Harness worn", "tick": "harness" },
+      { "text": "Harness pre-use check", "tick": "chk=held" },
+      { "text": "Clipped to a rated anchor", "tick": "chk=held" }
+    ],
+    "note": "Fills in as the crew makes it safe."
+  },
+
+  "start": "intro",
+
+  "scenes": {
+
+    "intro": {
+      "step": 0, "time": "1640", "title": "Tasking",
+      "text": "A floodlight on the shelter roof was damaged during the day. It has to be refitted before the 1730 cut-off, because the area is being inspected at 0800 tomorrow. Your team lead, 3SG Aaron, has three of you on it. Harnesses are booked out from the store at the other end of the line, about ten minutes there and back.",
+      "choices": [ { "text": "Start the drill", "next": "spot" } ]
+    },
+
+    "spot": {
+      "step": 1, "time": "1642", "title": "Spot it",
+      "text": "Aaron is pushing the pace. Ravi grabs the ladder, props it against the shelter and puts a foot on the first rung. No harness.",
+      "say": [
+        { "who": "AA", "line": "Need this up before 1730, guys. Quick quick." },
+        { "who": "RV", "line": "Two metres only. Ten minutes to get a harness, we don’t have ten minutes." }
+      ],
+      "choices": [
+        { "text": "Keep working on your own part. He’s done this before.", "grade": "poor",
+          "skills": { "SA": -2 }, "set": { "pos": "top", "speak": "missed" }, "next": "up",
+          "feedback": "You saw it and said nothing. Two metres is work at height, and a fall from that height can mean a head or spinal injury." },
+        { "text": "“Ravi, harness lah.”", "grade": "ok",
+          "skills": { "COM": 1 }, "next": "brush",
+          "feedback": "You raised it, which counts. But a throwaway line is easy to wave off, and he does." },
+        { "text": "“Ravi, stop. Come down for a sec. Two metres is work at height.”", "grade": "good",
+          "skills": { "COM": 2, "LEAD": 1 }, "next": "brush",
+          "feedback": "Clear and direct: you named the action (stop), the reason, and what you want him to do." }
+      ],
+      "pause": {
+        "prompt": "Ladder up, no harness, everyone in a rush. What’s your next best action?",
+        "choices": [
+          { "text": "Stop the work and call it out, now.", "grade": "good",
+            "skills": { "DM": 2, "LEAD": 1 }, "next": "brush",
+            "feedback": "That’s the pause working: you noticed the rush was changing how the team works, and acted before anyone left the ground." },
+          { "text": "Hold the ladder steady for him so it’s safer.", "grade": "poor",
+            "skills": { "DM": -1 }, "set": { "pos": "top", "speak": "missed" }, "next": "up",
+            "feedback": "Making an unsafe act a bit less unsafe still lets it go ahead. Holding the ladder makes you part of it." }
+        ]
+      }
+    },
+
+    "brush": {
+      "step": 2, "time": "1644", "title": "Speak up",
+      "text": "Ravi stops on the first rung and looks over at Aaron.",
+      "say": [
+        { "who": "RV", "line": "Relax lah, I’ve done this a hundred times. Aaron, we’re good right?" },
+        { "who": "AA", "line": "Just be quick." }
+      ],
+      "choices": [
+        { "text": "“Fine, your call.”", "grade": "poor",
+          "skills": { "LEAD": -2 }, "set": { "pos": "top", "speak": "missed" }, "next": "up",
+          "feedback": "One brush-off and the concern is gone. Experience and seniority don’t change how hard the ground is." },
+        { "text": "“Then I’ll foot the ladder so at least it’s steady.”", "grade": "poor",
+          "skills": { "DM": -1 }, "set": { "pos": "top", "speak": "missed" }, "next": "up",
+          "feedback": "This is the common mistake: helping the unsafe act go a bit better. Footing the ladder doesn’t stop a fall from the top." },
+        { "text": "“Why are you choosing not to wear it?”", "grade": "ok",
+          "skills": { "COM": 2 }, "set": { "speak": "held" }, "next": "esc",
+          "say": [
+            { "who": "RV", "line": "Because the store is at the other end and it’s already 1645." },
+            { "who": "ME", "line": "Then let’s fix that, not skip the harness. Come down. I’m calling 2SG Wong." }
+          ],
+          "feedback": "Asking why brings out the real reason, a harness that is too far away, and that is a system problem worth logging. Make sure he’s on the ground before the discussion." },
+        { "text": "“No. Not without a harness. Ravi, come down. Aaron, I’m stopping this until we have one, and I’m calling 2SG Wong.”", "grade": "good",
+          "skills": { "LEAD": 2, "COM": 1, "DM": 1 }, "set": { "speak": "held" }, "next": "esc",
+          "feedback": "You stopped the task and escalated, which is the right response. You said it to both of them, so the team lead can’t quietly overrule it." }
+      ],
+      "pause": {
+        "prompt": "He’s brushed you off and the team lead is backing speed. What’s your next best action?",
+        "choices": [
+          { "text": "Stop the task and escalate to the supervisor.", "grade": "good",
+            "skills": { "DM": 3, "LEAD": 2 }, "set": { "speak": "held" }, "next": "esc",
+            "feedback": "Right call. When your peers have already overruled you, take it one level up rather than arguing louder." },
+          { "text": "Let it go this once and raise it at the debrief.", "grade": "poor",
+            "skills": { "DM": -2 }, "set": { "pos": "top", "speak": "missed" }, "next": "up",
+            "feedback": "If he falls, there’s nothing left to raise at the debrief." }
+        ]
+      }
+    },
+
+    "up": {
+      "step": 2, "time": "1646", "title": "At the top", "alert": true,
+      "text": "Ravi is at the top of the ladder, leaning out to reach the bracket. One hand on the light, one on the roof edge. The ladder foot is on the wet concrete apron.",
+      "choices": [
+        { "text": "Keep an eye on him. It’ll be done in two minutes.", "grade": "poor",
+          "skills": { "SA": -2, "DM": -2 }, "next": "fall",
+          "feedback": "The worst moment of the job was right in front of you: leaning out at the top of a ladder on a wet surface." },
+        { "text": "“Ravi, stop. Don’t lean. Three points of contact and come down slowly.”", "grade": "good",
+          "skills": { "DM": 3, "LEAD": 1 }, "set": { "pos": "ground", "late": true, "speak": "held" }, "next": "esc",
+          "feedback": "A late catch, but a calm and specific one. You gave him what to do as well as what to stop." }
+      ],
+      "pause": {
+        "prompt": "He’s leaning out at the top step, no harness. What’s your next best action?",
+        "choices": [
+          { "text": "Calmly tell him to stop leaning and come down with three points of contact.", "grade": "good",
+            "skills": { "DM": 3, "SA": 1 }, "set": { "pos": "ground", "late": true, "speak": "held" }, "next": "esc",
+            "feedback": "Calm beats loud here. He’s at the most unstable point of the job." },
+          { "text": "Shout “STOP!”", "grade": "ok",
+            "set": { "pos": "ground", "late": true, "speak": "held" }, "next": "esc",
+            "say": [ { "who": "RV", "line": "Whoa— ok ok, coming down." } ],
+            "feedback": "It worked, just. Startling someone at height can cause the slip you’re trying to prevent. Use a firm, calm instruction." }
+        ]
+      }
+    },
+
+    "fall": {
+      "step": 2, "time": "1648", "title": "Fall from height",
+      "onEnter": { "pos": "fallen", "fall": true },
+      "text": "The ladder foot skids on the wet apron. Ravi drops about one and a half metres, lands badly and rolls his ankle. A little further back and it would have been his head on the concrete. The medic is called, work stops, and the occurrence must be reported. The light is not fitted.",
+      "choices": [ { "text": "Go to debrief", "next": "debrief" } ]
+    },
+
+    "esc": {
+      "step": 3, "time": "1650", "title": "Escalate",
+      "text": "Ravi is on the ground. You call 2SG Wong, the supervisor.",
+      "say": [ { "who": "WG", "line": "Aiyah, it’s two metres. Can’t you all just get it done? I’m in a meeting." } ],
+      "choices": [
+        { "text": "“Noted, sergeant.” Let Ravi carry on.", "grade": "poor",
+          "skills": { "LEAD": -2 }, "set": { "esc": "missed", "pos": "top" }, "next": "up",
+          "feedback": "Escalating only works if you hold your ground when the answer is wrong. This is where most speak-ups fail." },
+        { "text": "“Sergeant, it’s work at height with no fall protection. I’m asking to hold the task 15 minutes to get a harness. We still make 1730.”", "grade": "good",
+          "minutes": 12, "skills": { "COM": 2, "LEAD": 2 }, "set": { "esc": "held" },
+          "say": [ { "who": "WG", "line": "…Fine. Hold it. Get the harness." } ],
+          "feedback": "Hazard, request and cost in one breath. You made it easy for him to say yes." },
+        { "text": "Skip him and call the Unit Safety Officer directly.", "grade": "ok",
+          "minutes": 14, "skills": { "LEAD": 1, "COM": -1 }, "set": { "esc": "held" },
+          "say": [ { "who": "SO", "line": "Hold the task. I’ll speak to 2SG Wong." } ],
+          "feedback": "It works, and you’re right to stop the job. Going around your supervisor should be the backup for when he won’t listen, though, not the first call." }
+      ],
+      "pause": {
+        "prompt": "The supervisor is pushing back. What’s your next best action?",
+        "choices": [
+          { "text": "Restate it: the hazard, what you’re asking for, and what it costs.", "grade": "good",
+            "minutes": 12, "skills": { "DM": 2, "COM": 2 }, "set": { "esc": "held" },
+            "say": [
+              { "who": "ME", "line": "Sergeant, no fall protection at two metres. Fifteen minutes for a harness, and we still make the deadline." },
+              { "who": "WG", "line": "…OK. Do it properly." }
+            ],
+            "feedback": "A pause, then a sharper message. Supervisors say yes more easily when the cost is clear." },
+          { "text": "Hang up and let Ravi go ahead.", "grade": "poor",
+            "skills": { "DM": -2 }, "set": { "esc": "missed", "pos": "top" }, "next": "up",
+            "feedback": "One push-back from a senior and the stop was gone." }
+        ]
+      },
+      "next": "check"
+    },
+
+    "check": {
+      "step": 4, "time": "1704", "title": "Make it safe",
+      "onEnter": { "harness": true },
+      "text": "The harness arrives. Ravi is suiting up.",
+      "say": [ { "who": "RV", "line": "OK, wearing it. I’ll clip onto the light bracket, can?" } ],
+      "choices": [
+        { "text": "“Pre-use check first: webbing, buckles, lanyard, tag. And clip to the rated anchor on the mast, not the light bracket.”", "grade": "good",
+          "minutes": 3, "skills": { "SA": 2, "COM": 1 }, "set": { "chk": "held", "pos": "top" },
+          "feedback": "A harness is only as good as its condition and its anchor. The light bracket is the thing you’re working on, so it isn’t an anchor." },
+        { "text": "“It was checked last month. Just clip on and go.”", "grade": "poor",
+          "skills": { "SA": -2 }, "set": { "chk": "missed" },
+          "feedback": "Skipping the checks to win back time is the trap here. An unchecked harness on the wrong anchor feels safe and isn’t." },
+        { "text": "“Clip onto whatever’s nearest.”", "grade": "poor",
+          "skills": { "SA": -2 }, "set": { "chk": "missed" },
+          "feedback": "The nearest point is usually the bracket he’s about to loosen. If it lets go, so does he." }
+      ],
+      "next": "close"
+    },
+
+    "close": {
+      "step": 5, "time": "{finish}", "title": "Close out",
+      "onEnter": { "pos": "ground" },
+      "text": "The light is fitted at {finish}, before the 1730 cut-off. Ravi climbs down.",
+      "choices": [
+        { "text": "Call it out in front of the team: “This is why we have rules.”", "grade": "poor",
+          "skills": { "COM": -1 },
+          "feedback": "Public blame teaches people to hide it next time, not to stop." },
+        { "text": "Quick private word: thank him for coming down, ask what would make harnesses easier to get, and log it as a near miss.", "grade": "good",
+          "skills": { "COM": 2, "LEAD": 1 },
+          "feedback": "You closed the loop without blaming him, and the real cause, a harness ten minutes away, now goes into the reporting system." },
+        { "text": "Say nothing. It worked out.", "grade": "ok",
+          "skills": { "COM": -1 },
+          "feedback": "The job is done, but the reason Ravi skipped the harness is still there for the next person in a hurry." }
+      ],
+      "next": "debrief"
+    }
+  },
+
+  "debrief": {
+    "verdicts": [
+      { "if": "fall", "title": "Ravi fell. Nothing stopped him going up unprotected.", "text": "Each chance to stop the job was waved through under time pressure." },
+      { "if": "chk=missed", "title": "Harness on, but unchecked. Safe today, by luck.", "text": "You stopped the job, then gave the time back by skipping the checks. Light fitted at {finish}." },
+      { "if": "late", "title": "Caught late: Ravi was already at the top.", "text": "It ended well, but it came down to the last few seconds. Light fitted at {finish}." },
+      { "title": "Stopped, escalated, made safe, and still on time.", "text": "Light fitted at {finish}, before the 1730 cut-off. Doing it properly cost about {minutes} minutes." }
+    ],
+    "cheese": {
+      "label": "Swiss cheese view of the three barriers against a fall",
+      "hazard": "Unprotected at 2 m", "hazardShort": "Fall risk",
+      "outcome": "Fall",
+      "layers": [
+        { "flag": "speak", "label": "Speak up and stop", "short": "Speak up" },
+        { "flag": "esc", "label": "Escalate and hold", "short": "Escalate" },
+        { "flag": "chk", "label": "Pre-use check", "short": "Check" }
+      ]
+    },
+    "questions": [
+      "Ravi dismissed the first reminder. What made the second attempt land, or fail? Practise the exact words.",
+      "The team lead backed speed over safety. How do you speak up when the person you’d escalate to is part of the problem?",
+      "Footing the ladder or keeping an eye on him feels helpful. Why does it count as a mistake here?",
+      "The real cause was a harness ten minutes away. What would make the safe choice the easy one: a harness kept at the shelter, a work-at-height kit with the job card?",
+      "When you finally stopped the job, how much time did it cost? Was the deadline ever really at risk?",
+      "How do you close out with Ravi so he stops next time without being told, rather than hiding it?"
+    ],
+    "footnote": "Fictional people, timings and locations for training use. Adapted from a scenario-based practice activity."
+  }
+}
