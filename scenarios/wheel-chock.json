@@ -1,0 +1,351 @@
+{
+  "title": "The chock that stayed in",
+  "kicker": "TOVC 7 Steps",
+  "duration": "About 10 minutes",
+  "summary": "You are the Vehicle Commander on a light utility vehicle movement. A phone call interrupts the BOS, and a wheel chock is still in when the vehicle tries to move off.",
+  "subtitle": "A crew resource management drill on the TOVC 7 Steps. You are the Vehicle Commander on a light utility vehicle movement. Make the calls, and hit PAUSE whenever something feels off.",
+
+  "steps": ["Pair up", "Pre-move brief", "BOS with VC", "Risk assessment", "Move-off checks", "Point and call", "Chocks in"],
+
+  "skills": {
+    "COM":  { "name": "Communication", "max": 7 },
+    "SA":   { "name": "Situational awareness", "max": 9 },
+    "LEAD": { "name": "Assertiveness", "max": 5 },
+    "WLM":  { "name": "Workload and distraction", "max": 3 },
+    "DM":   { "name": "Decision making", "max": 8 }
+  },
+
+  "people": {
+    "TO": { "name": "Darren (T.O)" },
+    "VC": { "name": "You (VC)", "me": true },
+    "OC": { "name": "OC (phone)" },
+    "LT": { "name": "Lt Tan (risk system)" }
+  },
+
+  "state": { "chocks": true, "chocksOut": false, "knows": false, "brief": false, "bosStarted": false, "parked": false, "incident": false },
+
+  "clock": { "arrival": "0812" },
+
+  "picture": {
+    "file": "pictures/vehicle.svg",
+    "alt": "Light utility vehicle parked on the MT line",
+    "shake": "lv",
+    "show": { "chock": "chocks" },
+    "caption": [
+      { "if": "incident", "text": "Movement halted at the MT line." },
+      { "if": ["parked", "chocks"], "text": "Parked at Site Bravo, chocks in." },
+      { "if": "parked", "text": "Parked at Site Bravo." },
+      { "if": "!bosStarted", "text": "On the MT line, ready for BOS." },
+      { "if": "chocks", "text": "On the MT line." },
+      { "text": "Chocks out and stowed." }
+    ]
+  },
+
+  "checklist": {
+    "title": "Darren’s pre-drive checklist",
+    "showWhen": "bosStarted",
+    "items": [
+      { "text": "1. Tyres and wheels", "tick": "bosStarted" },
+      { "text": "2. Lights and indicators", "tick": "bosStarted" },
+      { "text": "3. Seat belts", "tick": "bosStarted" },
+      { "text": "4. Fluids", "tick": "bosStarted" },
+      { "text": "5. Fire extinguisher", "tick": "bosStarted" },
+      { "text": "6. Warning lights on start-up", "tick": "bosStarted" },
+      { "text": "Wheel chocks out (TOVC step 3)", "tick": "chocksOut", "highlight": true }
+    ],
+    "note": { "if": "bosStarted", "then": "Generic pre-drive checks for this drill. The chock line isn’t one of them; it comes from TOVC step 3.", "else": "BOS not started." }
+  },
+
+  "start": "intro",
+
+  "scenes": {
+
+    "intro": {
+      "step": 0, "time": "0728", "title": "Tasking",
+      "text": "You are the Vehicle Commander for a light utility vehicle movement from the squadron MT line to Site Bravo. ETD 0745. The OC wants the vehicle at Bravo by 0815. Your Transport Operator is CFC Darren Lim. Work through the TOVC 7 Steps with him.",
+      "choices": [
+        { "text": "Start the drill", "next": "pair" }
+      ]
+    },
+
+    "pair": {
+      "step": 1, "time": "0730", "title": "Pair up",
+      "say": [ { "who": "TO", "line": "Morning sir. OC has called the line twice already. We’re tight on time." } ],
+      "choices": [
+        { "text": "We know each other. Skip the intro and get moving.", "grade": "poor",
+          "skills": { "COM": -1, "LEAD": -1 },
+          "feedback": "Pair-up exists to catch an inexperienced pairing. You skipped it, so you don’t know Darren has never driven to Bravo, and that changes how the next steps play out." },
+        { "text": "Quick pair-up: how many km on this vehicle, and have you driven to Bravo before?", "grade": "good",
+          "minutes": 1, "skills": { "COM": 2, "SA": 1 }, "set": { "knows": true },
+          "say": [
+            { "who": "TO", "line": "About 600 km, sir. Never been to Bravo." },
+            { "who": "VC", "line": "I’ve been a VC two years, last duty was Monday, and I’ve done Bravo twice. I’ll call the turns." }
+          ],
+          "feedback": "Two-way pair-up in under a minute. You now know this is a new driver on a new route, which is exactly the pairing step 1 is meant to flag." },
+        { "text": "Just tell me your mileage.", "grade": "ok",
+          "skills": { "COM": 1 },
+          "say": [ { "who": "TO", "line": "About 600 km, sir." } ],
+          "feedback": "Half a pair-up. You got his mileage but not his route familiarity, and he got nothing about you. It runs both ways so the T.O knows how much he can lean on the VC." }
+      ],
+      "next": "brief"
+    },
+
+    "brief": {
+      "step": 2, "time": "0733", "title": "Pre-movement brief",
+      "text": "The route map is open on your phone. You have about five minutes before BOS.",
+      "choices": [
+        { "text": "Full brief: SRA, route on the map, and watch areas (camp exit gate, school zone on the way to Bravo).", "grade": "good",
+          "minutes": 2, "skills": { "SA": 2, "COM": 1 }, "set": { "brief": true },
+          "feedback": "Watch areas briefed before the wheels turn means fewer surprises on the road. For a T.O new to the route, this is the most useful five minutes of the trip." },
+        { "text": "Route only. I’ll call out hazards as we go.", "grade": "ok",
+          "minutes": 1,
+          "feedback": "Darren knows where he’s going but not what to look for. Leaving hazards for the drive loads you up at the moment you need spare capacity most." },
+        { "text": "No need. Just follow my directions.", "grade": "poor",
+          "skills": { "SA": -1, "COM": -1 },
+          "feedback": "Darren is now driving blind on the route and relying on you turn by turn. Any distraction on your side becomes his problem too." }
+      ],
+      "next": "bos"
+    },
+
+    "bos": {
+      "step": 3, "time": "0738", "title": "BOS with the VC",
+      "onEnter": { "bosStarted": true },
+      "text": "Darren starts the BOS walk-round with the checklist. Halfway round, your phone rings: the OC, asking for your ETA. Two minutes later Darren climbs into the cab.",
+      "say": [ { "who": "TO", "line": "BOS done, sir. All serviceable." } ],
+      "choices": [
+        { "text": "Good. Mount up.", "grade": "poor",
+          "skills": { "WLM": -1, "SA": -1 }, "set": { "bos": "missed" },
+          "feedback": "Step 3 says the T.O goes through BOS with the VC. The call pulled you out, and the one item that isn’t on the printed checklist, chocks out, is the one that slipped." },
+        { "text": "Hold on. Read the checklist back to me, chocks included.", "grade": "good",
+          "minutes": 1, "skills": { "COM": 2, "LEAD": 1, "SA": 1 }, "set": { "chocks": false, "chocksOut": true, "bos": "held" },
+          "say": [ { "who": "TO", "line": "All items checked… chocks… ah. Rear chock is still in, sir. Removing now." } ],
+          "feedback": "The read-back caught it. You recovered from the distraction by making the check verbal." },
+        { "text": "Tell the OC you’ll call back, then walk the rest of the BOS with Darren.", "grade": "good",
+          "minutes": 1, "skills": { "WLM": 2, "SA": 1, "LEAD": 1 }, "set": { "chocks": false, "chocksOut": true, "bos": "held" },
+          "say": [
+            { "who": "VC", "line": "Sir, I’ll call you back in three minutes." },
+            { "who": "TO", "line": "Rear left… chock in. Removing and stowing." }
+          ],
+          "feedback": "Best answer. Step 3 is a two-person check. Putting the OC on hold cost 30 seconds, the cheapest fix you’ll get today." }
+      ],
+      "pause": {
+        "prompt": "Phone at your ear, T.O halfway round the vehicle, OC waiting for an answer. What’s your next best action?",
+        "choices": [
+          { "text": "End the call and rejoin the BOS.", "grade": "good",
+            "minutes": 1, "skills": { "WLM": 2, "DM": 2, "SA": 1 }, "set": { "chocks": false, "chocksOut": true, "bos": "held" },
+            "say": [
+              { "who": "VC", "line": "Sir, call you back shortly." },
+              { "who": "TO", "line": "Rear left, chock in. Removing." }
+            ],
+            "feedback": "That’s the pause working as designed: stop, see that the two-person check has become a one-person check, and fix it before it costs anything." },
+          { "text": "Finish the call, then have Darren read the checklist back.", "grade": "ok",
+            "minutes": 1, "skills": { "DM": 1, "COM": 1 }, "set": { "chocks": false, "chocksOut": true, "bos": "held" },
+            "say": [ { "who": "TO", "line": "…and chocks. Ah. Still in, sir." } ],
+            "feedback": "Caught, a step later than ideal. The read-back saved it, but the check ran without you." },
+          { "text": "Nothing. Darren has this.", "grade": "poor",
+            "skills": { "DM": -1 }, "set": { "bos": "missed" },
+            "feedback": "You paused but didn’t act. A pause only counts if it changes the next action." }
+        ]
+      },
+      "next": { "if": "knows", "then": "risk_known", "else": "risk_unknown" }
+    },
+
+    "risk_known": {
+      "step": 4, "time": "0741", "title": "Risk assessment",
+      "text": "You enter the task in the risk assessment system. New T.O on an unfamiliar route: the risk assessment comes out MEDIUM. It needs the Countersigning Officer, Lt Tan, to input mitigations. He’s in a meeting.",
+      "choices": [
+        { "text": "Submit now. Lt Tan can add the mitigations later.", "grade": "poor",
+          "skills": { "DM": -2, "LEAD": -1 },
+          "feedback": "A medium-risk task moving without mitigations is risk no one has accepted. “Later” usually means after the drive." },
+        { "text": "Message Lt Tan and wait for his mitigations.", "grade": "good",
+          "minutes": 2, "skills": { "DM": 2, "LEAD": 1 },
+          "say": [ { "who": "LT", "line": "Mitigations in: VC to call out watch areas, 40 km/h through the school zone, no reversing without a ground guide." } ],
+          "feedback": "Two minutes’ delay, and the risk is now owned at the right level, with mitigations Darren can actually act on." },
+        { "text": "Rate it LOW. I know the route, that’s enough.", "grade": "poor",
+          "skills": { "DM": -2 },
+          "feedback": "That’s rating the risk to fit the schedule. Your familiarity doesn’t cancel the T.O’s inexperience." }
+      ],
+      "next": "move"
+    },
+
+    "risk_unknown": {
+      "step": 4, "time": "0741", "title": "Risk assessment",
+      "text": "You enter the task in the risk assessment system. With what you know, the risk assessment comes out LOW. You never asked whether Darren has driven to Bravo.",
+      "choices": [
+        { "text": "Submit as LOW.", "grade": "poor",
+          "skills": { "DM": -1 },
+          "feedback": "The rating was wrong because the input was wrong. Pair-up feeds the risk assessment: skip step 1 and step 4 is built on a guess." },
+        { "text": "Before submitting, ask Darren whether he knows the route.", "grade": "good",
+          "minutes": 2, "skills": { "DM": 2, "COM": 1 }, "set": { "knows": true },
+          "say": [
+            { "who": "TO", "line": "Never driven there, sir." },
+            { "who": "LT", "line": "Re-rated MEDIUM. Mitigations in: VC calls watch areas, 40 km/h in the school zone." }
+          ],
+          "feedback": "Good recovery. You closed the gap step 1 left open before it reached the road." }
+      ],
+      "next": "move"
+    },
+
+    "move": {
+      "step": 5, "time": "0744", "title": "Move-off checks",
+      "say": [ { "who": "TO", "line": "Ready to move, sir." } ],
+      "choices": [
+        { "text": "Seatbelts, yours and mine. Handbrake off on my call, after point and call.", "grade": "good",
+          "skills": { "COM": 1, "SA": 1 },
+          "feedback": "Both belts, and the handbrake held until the surroundings are confirmed. Clear sequencing from the VC." },
+        { "text": "Your belt on. Mine’s fine, it’s a short drive.", "grade": "poor",
+          "skills": { "COM": -1, "LEAD": -1 },
+          "feedback": "Step 5 covers the passenger too. The VC sets the standard: skip yours and Darren learns the rule is optional." },
+        { "text": "Belts on, handbrake off, let’s go.", "grade": "ok",
+          "skills": { "SA": -1 },
+          "feedback": "Belts done, but the vehicle is now free to roll before anyone has confirmed it’s clear around it." }
+      ],
+      "next": "pointcall"
+    },
+
+    "pointcall": {
+      "step": 6, "time": "0745", "title": "Point and call",
+      "text": "Before moving off: surrounding checks, then master and control switches.",
+      "choices": [
+        { "text": "Full point and call. Darren calls front, sides and mirrors from the cab; you dismount and check the rear.", "grade": "good",
+          "minutes": 1, "skills": { "SA": 2, "COM": 1 },
+          "set": { "if": "chocks", "then": { "chocks": false, "chocksOut": true, "pc": "held" } },
+          "say": { "if": "chocks",
+            "then": [
+              { "who": "VC", "line": "Rear left, chock in! Removing." },
+              { "who": "TO", "line": "Chock stowed. Front clear, left clear, right clear. Master switch on." }
+            ],
+            "else": [ { "who": "TO", "line": "Front clear, left clear, right clear, rear clear. Master switch on." } ] },
+          "feedback": { "if": "chocks", "then": "Point and call caught what BOS missed. The second layer did its job.", "else": "All clear. Routine, but the routine is the point." } },
+        { "text": "Darren points and calls from the cab, mirrors only.", "grade": "ok",
+          "skills": { "SA": 1 },
+          "set": { "if": "chocks", "then": { "pc": "missed" } },
+          "say": [ { "who": "TO", "line": "Front clear, left clear, right clear, mirrors clear." } ],
+          "feedback": { "if": "chocks", "then": "Mirrors show the road, not the front face of a rear tyre. A low chock tight against the wheel is easy to miss from the driver’s seat.", "else": "Clear this time, though mirrors don’t show much at wheel level." } },
+        { "text": "Skip it. We’re already behind.", "grade": "poor",
+          "skills": { "SA": -2 },
+          "set": { "if": "chocks", "then": { "pc": "missed" } },
+          "feedback": "Time pressure is when point and call earns its keep. Skipping it removes a layer at exactly the moment the others are weakest." }
+      ],
+      "next": { "if": "chocks", "then": "lurch", "else": "drive" }
+    },
+
+    "lurch": {
+      "step": 6, "time": "0746", "title": "Moving off", "alert": true,
+      "text": "Handbrake off. Darren eases on the throttle. The vehicle shudders and the rear squats, but nothing moves. The engine note climbs.",
+      "say": [ { "who": "TO", "line": "Feels heavy, sir… must be the slope." } ],
+      "question": "Darren reaches for more throttle. You say:",
+      "choices": [
+        { "text": "Give it more gas, it’ll go.", "grade": "poor",
+          "skills": { "DM": -3, "SA": -2 }, "set": { "pause": "missed", "incident": true },
+          "feedback": "The vehicle was telling you something. More power turned a stuck vehicle into an uncontrolled one.",
+          "next": "incident" },
+        { "text": "STOP. Handbrake on. Something’s not right.", "grade": "good",
+          "skills": { "DM": 3, "LEAD": 2 }, "set": { "pause": "held" },
+          "feedback": "The last layer held. You didn’t need to know what was wrong to stop. That’s Pause, then work out the NBA.",
+          "next": "found" },
+        { "text": "What do you think it is?", "grade": "ok",
+          "skills": { "COM": 1, "DM": -1 }, "set": { "pause": "held" },
+          "say": [
+            { "who": "TO", "line": "Not sure, sir—" },
+            { "who": "VC", "line": "Stop, stop! Handbrake on!" }
+          ],
+          "feedback": "Asking was right, but he kept his foot down while answering and the wheel started to climb. Stop first; discuss once the vehicle is safe.",
+          "next": "found" }
+      ],
+      "pause": {
+        "prompt": "Engine working, vehicle not moving, T.O reaching for more throttle. What’s your next best action?",
+        "choices": [
+          { "text": "Handbrake on, neutral, dismount and look.", "grade": "good",
+            "skills": { "DM": 4, "LEAD": 2, "SA": 1 }, "set": { "pause": "held" },
+            "feedback": "Textbook Pause and NBA. Stop the energy first, then go and find out.",
+            "next": "found" },
+          { "text": "Reverse a little and try again with more run-up.", "grade": "poor",
+            "skills": { "DM": -2 }, "set": { "pause": "missed", "incident": true },
+            "say": [ { "who": "TO", "line": "Reversing… going again." } ],
+            "feedback": "You paused, then chose an action that adds energy without knowing the cause.",
+            "next": "incident" }
+        ]
+      }
+    },
+
+    "incident": {
+      "step": 6, "time": "0746", "title": "Near miss",
+      "text": "The rear wheel climbs the chock and flicks it out sideways. The vehicle jolts forward a metre toward the MT line guard post before Darren stamps on the brake. No one is hurt. The movement is halted and the occurrence must be reported.",
+      "choices": [ { "text": "Go to debrief", "next": "debrief" } ]
+    },
+
+    "found": {
+      "step": 6, "time": "0747", "title": "Chock found",
+      "text": "You dismount. Rear left wheel: the chock is still in, pressed hard against the tyre.",
+      "say": [
+        { "who": "VC", "line": "Chock in! Handbrake stays on." },
+        { "who": "TO", "line": "Handbrake on, sir." }
+      ],
+      "choices": [
+        { "text": "Remove and stow it, then run a full point and call again before moving.", "grade": "good",
+          "minutes": 2, "skills": { "SA": 2 }, "set": { "chocks": false, "chocksOut": true },
+          "feedback": "Reset properly. After a surprise, the safe move is to re-run the check, not just fix the one thing you found." },
+        { "text": "Kick it clear and go.", "grade": "ok",
+          "skills": { "SA": -1 }, "set": { "chocks": false, "chocksOut": true },
+          "feedback": "The chock is out, but now it’s lying loose on the MT line for the next vehicle, and nobody re-checked the surroundings." }
+      ],
+      "next": "drive"
+    },
+
+    "drive": {
+      "step": 6, "time": "0752", "title": "On the road",
+      "text": { "if": "brief",
+        "then": "Approaching the school zone, Darren slows to 40 without a prompt. He knew it was coming.",
+        "else": "At the school zone you call “slow down” late, and Darren brakes harder than he’d like. He didn’t know it was there." },
+      "choices": [ { "text": "Continue to Bravo", "next": "park" } ]
+    },
+
+    "park": {
+      "step": 7, "time": "{arrival}", "title": "Wheel chocks in",
+      "onEnter": { "parked": true },
+      "text": "You arrive at Site Bravo. The OC is waiting at the gate.",
+      "choices": [
+        { "text": "Park, chocks in, point and call, then report to the OC.", "grade": "good",
+          "skills": { "SA": 1, "LEAD": 1 }, "set": { "chocks": true },
+          "feedback": "Step 7 closes the loop. The next crew starts with chocks in, and their step 3 tells them to take them out." },
+        { "text": "Report to the OC first, chocks after.", "grade": "poor",
+          "skills": { "WLM": -1 },
+          "feedback": "Parked and unattended without chocks, even briefly. The OC can wait 30 seconds." },
+        { "text": "The ground is flat. No chocks needed.", "grade": "poor",
+          "skills": { "SA": -2 },
+          "feedback": "Flat to the eye isn’t flat to a parked vehicle. And skipping step 7 breaks the habit that step 3 depends on." }
+      ],
+      "next": "debrief"
+    }
+  },
+
+  "debrief": {
+    "verdicts": [
+      { "if": "incident", "title": "Near miss: the vehicle rode over its own chock.", "text": "Every layer between the chock and the move-off had a hole in it on the day." },
+      { "if": "bos=held", "title": "Chock caught at step 3. The first layer held.", "text": "Arrived Site Bravo at {arrival} hrs, with no damage and no drama." },
+      { "if": "pc=held", "title": "Chock caught at point and call. The second layer held.", "text": "BOS missed it; point and call didn’t. Arrived {arrival} hrs." },
+      { "title": "Caught at the last layer: the pause at move-off.", "text": "It worked, but only the final barrier was left. Arrived {arrival} hrs." }
+    ],
+    "cheese": {
+      "label": "Swiss cheese view of the three barriers against the chock",
+      "hazard": "Chock left in", "hazardShort": "Chock",
+      "outcome": "Near miss",
+      "layers": [
+        { "flag": "bos", "label": "Step 3: BOS with VC", "short": "BOS" },
+        { "flag": "pc", "label": "Step 6: Point and call", "short": "Point & call" },
+        { "flag": "pause", "label": "Pause at move-off", "short": "Pause" }
+      ]
+    },
+    "skillsNote": "Pre-movement steps you got right show up as the trip going smoothly, not just as points.",
+    "questions": [
+      "Where in the 7 Steps should the chock have been caught, and who owns that check: the T.O, the VC, or both?",
+      "The printed pre-drive checklist has no wheel-chock line; “chocks out” lives only in TOVC step 3. Should it be on the card? What else lives only in people’s heads?",
+      "The OC’s phone call arrived mid-BOS. How do we handle a senior interrupting a two-person check? What words does the VC use?",
+      "If the VC had said “just go” when the vehicle felt heavy, how should the T.O speak up? Practise the exact sentence.",
+      "At what moment did you first feel something was off? What was the next best action, and what would have made that action easier?",
+      "Make the safe choice easy: would a flagged chock, a lanyard to the steering wheel, or a “chocks stowed” bracket remove the need to remember?"
+    ],
+    "footnote": "Fictional crew, timings and locations for training use."
+  }
+}
